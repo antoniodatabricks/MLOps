@@ -64,9 +64,9 @@ resources:
         - task_key: create_serving_endpoint
           notebook_task:
             base_parameters:
-              model_name: "dev.default.wine_model"
+              model_name: "prod.default.wine_model"
               endpoint_name: "demo_model_serving_endpoint"
-              tracking_table_catalog: "dev"
+              tracking_table_catalog: "prod"
               tracking_table_schema: "default"
               tracking_table_name: "endpoint_inference"
               host: "https://adb-3545089961486183.3.azuredatabricks.net"
