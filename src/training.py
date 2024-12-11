@@ -17,17 +17,13 @@
 
 # COMMAND ----------
 
-# MAGIC %pip install --upgrade "mlflow-skinny[databricks]"
-# MAGIC dbutils.library.restartPython()
-
-# COMMAND ----------
-
 # MAGIC %md ## Unity Catalog setup
 # MAGIC By default, the MLflow Python client creates models in the Databricks workspace model registry. To save models in Unity Catalog, configure the MLflow client as shown in the following cell.
 
 # COMMAND ----------
 
 import mlflow
+
 mlflow.set_registry_uri("databricks-uc")
 
 # COMMAND ----------
@@ -38,13 +34,13 @@ mlflow.set_registry_uri("databricks-uc")
 
 # Training datasets
 
-TRAINING_DATA_CATALOG = "prod"
-TRAINING_DATA_SCHEMA = "training"
+training_data_catalog = dbutils.widgets.get("training_data_catalog")
+training_data_schema = dbutils.widgets.get("training_data_schema")
 
 # Catalog and schema for storing models and predictions
 
-FINAL_CATALOG = "dev"
-FINAL_SCHEMA = "default"
+final_catalog = dbutils.widgets.get("final_catalog")
+final_schema = dbutils.widgets.get("final_schema")
 
 # COMMAND ----------
 
@@ -66,8 +62,8 @@ from hyperopt.pyll import scope
 # COMMAND ----------
 
 # Load data from Unity Catalog as Pandas dataframes
-white_wine = spark.read.table(f"{TRAINING_DATA_CATALOG}.{TRAINING_DATA_SCHEMA}.white_wine").toPandas()
-red_wine = spark.read.table(f"{TRAINING_DATA_CATALOG}.{TRAINING_DATA_SCHEMA}.red_wine").toPandas()
+white_wine = spark.read.table(f"{training_data_catalog}.{training_data_schema}.white_wine").toPandas()
+red_wine = spark.read.table(f"{training_data_catalog}.{training_data_schema}.red_wine").toPandas()
 
 # Add Boolean fields for red and white wine
 white_wine['is_red'] = 0.0
@@ -230,6 +226,8 @@ with mlflow.start_run(run_name='gb_hyperopt') as run:
 
 # COMMAND ----------
 
+from mlflow.models import infer_signature
+
 # Sort runs by their test auc. In case of ties, use the most recent run.
 best_run = mlflow.search_runs(
   order_by=['metrics.test_auc DESC', 'start_time DESC'],
@@ -248,8 +246,11 @@ best_model_pyfunc = mlflow.pyfunc.load_model(
 )
 
 # Make a dataset with all predictions
-best_model_predictions = X_test
+best_model_predictions = X_test.copy()
 best_model_predictions["prediction"] = best_model_pyfunc.predict(X_test)
+
+signature = infer_signature(X_test, best_model_pyfunc.predict(X_test))
+best_model_registered = mlflow.sklearn.log_model(best_model_pyfunc, "sk_models", signature=signature, extra_pip_requirements=["numpy"])
 
 # COMMAND ----------
 
@@ -258,19 +259,19 @@ best_model_predictions["prediction"] = best_model_pyfunc.predict(X_test)
 # COMMAND ----------
 
 # DBTITLE 1,Write results back to Unity Catalog
-predictions_table = f"{FINAL_CATALOG}.{FINAL_SCHEMA}.predictions"
+predictions_table = f"{final_catalog}.{final_schema}.predictions"
 spark.sql(f"DROP TABLE IF EXISTS {predictions_table}")
 
 results = spark.createDataFrame(best_model_predictions)
 
 #Write results back to Unity Catalog from Python
-results.write.saveAsTable(f"{FINAL_CATALOG}.{FINAL_SCHEMA}.predictions")
+results.write.saveAsTable(f"{final_catalog}.{final_schema}.predictions")
 
 # COMMAND ----------
 
 # DBTITLE 1,Save model to Unity Catalog
-model_uri = 'runs:/{run_id}/model'.format(
-    run_id=best_run.run_id
+model_uri = 'runs:/{run_id}/sk_models'.format(
+    run_id=best_model_registered.run_id
   )
 
-mlflow.register_model(model_uri, f"{FINAL_CATALOG}.{FINAL_SCHEMA}.wine_model")
+mlflow.register_model(model_uri, f"{final_catalog}.{final_schema}.wine_model")

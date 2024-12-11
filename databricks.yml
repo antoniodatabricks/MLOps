@@ -1,0 +1,79 @@
+bundle:
+  name: devops_pipeline
+
+resources:
+  jobs:
+    deploy_new_model_version:
+      name: training_validation_promotion
+      tasks:
+        - task_key: training
+          notebook_task:
+            notebook_path: /Workspace/Users/antonio.pinheirofilho@databricks.com/.bundle/src/training
+            base_parameters:
+              training_data_catalog: "prod"
+              training_data_schema: "training"
+              final_catalog: "dev"
+              final_schema: "default"
+            source: WORKSPACE
+          job_cluster_key: ml-cluster
+        - task_key: validation
+          depends_on:
+            - task_key: training
+          notebook_task:
+            notebook_path: /Workspace/Users/antonio.pinheirofilho@databricks.com/.bundle/src/validation
+            base_parameters:
+              challenger_model_name: "dev.default.wine_model"
+              champion_model_name: "dev.default.wine_model"
+              validation_data_catalog: "prod"
+              validation_data_schema: "training"
+            source: WORKSPACE
+          job_cluster_key: ml-cluster
+        - task_key: promotion
+          depends_on:
+            - task_key: validation
+          notebook_task:
+            notebook_path: /Workspace/Users/antonio.pinheirofilho@databricks.com/.bundle/src/promotion
+            base_parameters:
+              challenger_model_name: "dev.default.wine_model"
+            source: WORKSPACE
+          job_cluster_key: ml-cluster
+      job_clusters:
+        - job_cluster_key: ml-cluster
+          new_cluster:
+            spark_version: 15.4.x-cpu-ml-scala2.12
+            spark_conf:
+              spark.master: local[*, 4]
+              spark.databricks.cluster.profile: singleNode
+            azure_attributes:
+              first_on_demand: 1
+              availability: ON_DEMAND_AZURE
+              spot_bid_max_price: -1
+            node_type_id: Standard_D4ds_v5
+            custom_tags:
+              ResourceClass: SingleNode
+            spark_env_vars:
+              PYSPARK_PYTHON: /databricks/python3/bin/python3
+            enable_elastic_disk: true
+            data_security_mode: SINGLE_USER
+            runtime_engine: STANDARD
+            num_workers: 0
+
+    enable_serving:
+      name: create_serving_endpoint
+      tasks:
+        - task_key: create_serving_endpoint
+          notebook_task:
+            base_parameters:
+              model_name: "dev.default.wine_model"
+              endpoint_name: "demo_model_serving_endpoint"
+              tracking_table_catalog: "dev"
+              tracking_table_schema: "default"
+              tracking_table_name: "endpoint_inference"
+              host: "https://adb-3545089961486183.3.azuredatabricks.net"
+              test_table: "prod.training.red_wine"
+            notebook_path: /Workspace/Users/antonio.pinheirofilho@databricks.com/.bundle/src/serving endpoint
+
+targets:
+  prod:
+    workspace:
+      host: https://adb-3545089961486183.3.azuredatabricks.net/

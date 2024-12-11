@@ -4,15 +4,19 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./helper
+
+# COMMAND ----------
+
 # Models to validate 
 
-challenger_model_name = "dev.default.wine_model"
-champion_model_name = "dev.default.wine_model"
+challenger_model_name = dbutils.widgets.get("challenger_model_name")
+champion_model_name = dbutils.widgets.get("champion_model_name")
 
 # Validation datasets
 
-VALIDATION_DATA_CATALOG = "prod"
-VALIDATION_DATA_SCHEMA = "training"
+validation_data_catalog = dbutils.widgets.get("validation_data_catalog")
+validation_data_schema = dbutils.widgets.get("validation_data_schema")
 
 # COMMAND ----------
 
@@ -21,18 +25,6 @@ from mlflow import MlflowClient
 import mlflow.sklearn
 
 mlflow.set_registry_uri("databricks-uc")
-
-def get_latest_model_version(model_name_in:str = None):
-    """
-    Get latest version of registered model
-    """
-    client = MlflowClient()
-    model_version_infos = client.search_model_versions("name = '%s'" % model_name_in)
-
-    if model_version_infos:
-      return max([int(model_version_info.version) for model_version_info in model_version_infos])
-    else:
-      return None
 
 # COMMAND ----------
 
@@ -72,8 +64,8 @@ import pandas as pd
 import sklearn
 
 # Load data from Unity Catalog as Pandas dataframes
-white_wine = spark.read.table(f"{VALIDATION_DATA_CATALOG}.{VALIDATION_DATA_SCHEMA}.white_wine").toPandas()
-red_wine = spark.read.table(f"{VALIDATION_DATA_CATALOG}.{VALIDATION_DATA_SCHEMA}.red_wine").toPandas()
+white_wine = spark.read.table(f"{validation_data_catalog}.{validation_data_schema}.white_wine").toPandas()
+red_wine = spark.read.table(f"{validation_data_catalog}.{validation_data_schema}.red_wine").toPandas()
 
 # Add Boolean fields for red and white wine
 white_wine['is_red'] = 0.0
