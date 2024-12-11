@@ -4,6 +4,10 @@
 
 # COMMAND ----------
 
+# MAGIC %pip install mlflow
+
+# COMMAND ----------
+
 # MAGIC %run ./helper
 
 # COMMAND ----------
