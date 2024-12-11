@@ -12,7 +12,7 @@ resources:
             base_parameters:
               training_data_catalog: "prod"
               training_data_schema: "training"
-              final_catalog: "dev"
+              final_catalog: "prod"
               final_schema: "default"
             source: WORKSPACE
           job_cluster_key: ml-cluster
@@ -22,8 +22,8 @@ resources:
           notebook_task:
             notebook_path: /Workspace/Users/antonio.pinheirofilho@databricks.com/.bundle/devops_pipeline/prod/files/src/validation
             base_parameters:
-              challenger_model_name: "dev.default.wine_model"
-              champion_model_name: "dev.default.wine_model"
+              challenger_model_name: "prod.default.wine_model"
+              champion_model_name: "prod.default.wine_model"
               validation_data_catalog: "prod"
               validation_data_schema: "training"
             source: WORKSPACE
@@ -34,7 +34,7 @@ resources:
           notebook_task:
             notebook_path: /Workspace/Users/antonio.pinheirofilho@databricks.com/.bundle/devops_pipeline/prod/files/src/promotion
             base_parameters:
-              challenger_model_name: "dev.default.wine_model"
+              challenger_model_name: "prod.default.wine_model"
             source: WORKSPACE
           job_cluster_key: ml-cluster
       job_clusters:
