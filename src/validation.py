@@ -33,7 +33,6 @@ mlflow.set_registry_uri("databricks-uc")
 
 # COMMAND ----------
 
-from mlflow import MlflowClient
 client = MlflowClient()
 
 challenger_model_version = get_latest_model_version(challenger_model_name)
