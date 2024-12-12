@@ -1,5 +1,5 @@
 # This workflow validates, deploys, and runs the specified bundle in the development branch
-name: "PROD deployment"
+name: "PROD PR"
 
 # Ensure that only a single job or workflow using the same concurrency group
 # runs at a time.
