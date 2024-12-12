@@ -34,7 +34,7 @@ mlflow.set_registry_uri("databricks-uc")
 
 # Training datasets
 
-training_data_catalog = dbutils.widgets.get("training_data_catalog") abc
+training_data_catalog = dbutils.widgets.get("training_data_catalog")
 training_data_schema = dbutils.widgets.get("training_data_schema")
 
 # Catalog and schema for storing models and predictions
