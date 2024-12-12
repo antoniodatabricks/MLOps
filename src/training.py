@@ -159,7 +159,7 @@ predictions_loaded = model_loaded.predict(X_test)
 predictions_original = model_2.predict(X_test)
 
 # The loaded model should match the original
-assert(np.array_equal(predictions_loaded, predictions_original))
+assert np.array_equal(predictions_loaded, predictions_original)
 
 # COMMAND ----------
 
