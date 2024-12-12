@@ -46,7 +46,7 @@ def deploy_model_serving_endpoint(endpoint_name, endpoint_config):
     )
 
     # If endpoint doesn't exist, create it
-    if existing_endpoint == None:
+    if existing_endpoint is None:
 
         # Exemple on how to tag the endpoint
         tags = [Tag("team", "data science")]
