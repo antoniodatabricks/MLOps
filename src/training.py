@@ -214,7 +214,7 @@ with mlflow.start_run(run_name='gb_hyperopt') as run:
     fn=train_model, 
     space=search_space, 
     algo=tpe.suggest, 
-    max_evals=5,
+    max_evals=2,
     trials=spark_trials)
 
 # COMMAND ----------

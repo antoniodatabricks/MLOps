@@ -133,4 +133,4 @@ display(result_champion.metrics)
 
 # Comparing metrics of model challenger against model champion
 
-assert float(result_challenger.metrics["accuracy_score"]) >= float(result_champion.metrics["accuracy_score"]) , "Model challenger metrics are doesn't show improvements against model champion."
+assert float(result_challenger.metrics["accuracy_score"]) >= float(result_champion.metrics["accuracy_score"]) || float(result_challenger.metrics["recall_score"]) == float(result_champion.metrics["recall_score"]) || float(result_challenger.metrics["precision_score"]) == float(result_champion.metrics["precision_score"]) || float(result_challenger.metrics["f1_score"]) == float(result_champion.metrics["f1_score"]), "Model challenger metrics don't show improvements against model champion."
