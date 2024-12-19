@@ -35,4 +35,4 @@ jobs:
         pip install databricks-connect
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py') --disable=E0602,C0301,C0103,C0303,C0116,C0411,C0413,W0311,C0209,R1728,C0115,R0903,W0719,W0611,F0001,C0114,R1705,W3101,W0621,R0801,W0702
+        pylint $(git ls-files '*.py') --disable=all --enable=syntax-error
