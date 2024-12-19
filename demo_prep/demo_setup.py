@@ -50,7 +50,7 @@ red_wine.write.saveAsTable(f"{PROD_CATALOG_NAME}.{PROD_SCHEMA_NAME}.red_wine")
 from pyspark.sql.functions import *
 
 input_table_test = white_wine.withColumn("is_red", lit(0.0)).drop("quality")
-input_table_test.write.mode("overwrite").saveAsTable(f"{PROD_CATALOG_NAME}.{PROD_SCHEMA_NAME}.input_table_test")
+input_table_test.write.mode("overwrite").saveAsTable(f"{PROD_CATALOG_NAME}.default.mlflow_input_table_test")
 
 # COMMAND ----------
 
