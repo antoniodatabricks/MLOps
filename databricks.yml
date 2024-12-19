@@ -8,7 +8,7 @@ resources:
       tasks:
         - task_key: training
           notebook_task:
-            notebook_path: /Workspace/Users/antonio.pinheirofilho@databricks.com/.bundle/devops_pipeline/prod/files/src/training
+            notebook_path: /Workspace/Users/xxx@xxx.com/.bundle/devops_pipeline/prod/files/src/training
             base_parameters:
               training_data_catalog: "prod"
               training_data_schema: "training"
@@ -20,7 +20,7 @@ resources:
           depends_on:
             - task_key: training
           notebook_task:
-            notebook_path: /Workspace/Users/antonio.pinheirofilho@databricks.com/.bundle/devops_pipeline/prod/files/src/validation
+            notebook_path: /Workspace/Users/xxx@xxx.com/.bundle/devops_pipeline/prod/files/src/validation
             base_parameters:
               challenger_model_name: "prod.default.wine_model"
               champion_model_name: "prod.default.wine_model"
@@ -32,7 +32,7 @@ resources:
           depends_on:
             - task_key: validation
           notebook_task:
-            notebook_path: /Workspace/Users/antonio.pinheirofilho@databricks.com/.bundle/devops_pipeline/prod/files/src/promotion
+            notebook_path: /Workspace/Users/xxx@xxx.com/.bundle/devops_pipeline/prod/files/src/promotion
             base_parameters:
               challenger_model_name: "prod.default.wine_model"
             source: WORKSPACE
@@ -71,7 +71,7 @@ resources:
               tracking_table_name: "endpoint_inference"
               host: "https://xx.xx.azuredatabricks.net"
               test_table: "prod.training.red_wine"
-            notebook_path: /Workspace/Users/antonio.pinheirofilho@databricks.com/.bundle/devops_pipeline/prod/files/src/serving endpoint
+            notebook_path: /Workspace/Users/xxx@xxx.com/.bundle/devops_pipeline/prod/files/src/serving endpoint
 
 targets:
   prod:
