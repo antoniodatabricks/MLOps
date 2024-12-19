@@ -8,9 +8,9 @@ import requests
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
 import time
 
-token = "dapied063fdd5fd50fb165df2277e7a9a00d-3"
-endpoint_url = "https://adb-10697646213410.10.azuredatabricks.net/serving-endpoints/demo_model_serving_endpoint/invocations"
-cluster_id = "1218-232809-cpuroe4o"
+token = "xxxx"
+endpoint_url = "https://xx.xx.azuredatabricks.net/serving-endpoints/demo_model_serving_endpoint/invocations"
+cluster_id = "1219-200841-9pm1m2hi"
 
 app = Flask(__name__)
 

@@ -69,11 +69,11 @@ resources:
               tracking_table_catalog: "prod"
               tracking_table_schema: "default"
               tracking_table_name: "endpoint_inference"
-              host: "https://adb-3022319736923414.14.azuredatabricks.net"
+              host: "https://xx.xx.azuredatabricks.net"
               test_table: "prod.training.red_wine"
             notebook_path: /Workspace/Users/antonio.pinheirofilho@databricks.com/.bundle/devops_pipeline/prod/files/src/serving endpoint
 
 targets:
   prod:
     workspace:
-      host: https://adb-3022319736923414.14.azuredatabricks.net/
+      host: https://xx.xx.azuredatabricks.net/
