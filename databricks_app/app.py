@@ -8,7 +8,7 @@ import requests
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
 import time
 
-token = "dapi06ec21c4a357f3eac1899baedc3422e8-3"
+token = "dapied063fdd5fd50fb165df2277e7a9a00d-3"
 endpoint_url = "https://adb-10697646213410.10.azuredatabricks.net/serving-endpoints/demo_model_serving_endpoint/invocations"
 cluster_id = "1218-232809-cpuroe4o"
 
