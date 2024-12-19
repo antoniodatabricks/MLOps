@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-challenger_model_name = dbutils.widgets.get("challenger_model_name") ....
+challenger_model_name = dbutils.widgets.get("challenger_model_name")
 
 # COMMAND ----------
 
