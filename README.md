@@ -1,3 +1,3 @@
 # MLOps
 
-MLOps pipeline from DEV to PROD.
+MLOps pipeline from DEV to PROD
