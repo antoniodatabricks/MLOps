@@ -56,7 +56,7 @@ jobs:
 
       # Run the Databricks workflow named "my-job" as defined in the
       # bundle that was just deployed.
-      - run: databricks bundle run deploy_new_model_version --refresh-all
+      - run: databricks bundle run deploy_new_model_version --disable=all --enable=syntax-error
         working-directory: .
         env:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_PROD_WS_TOKEN }}
