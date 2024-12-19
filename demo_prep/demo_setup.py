@@ -44,3 +44,14 @@ spark.sql(f"DROP TABLE IF EXISTS {red_wine_table}")
 spark.sql(f"DROP TABLE IF EXISTS {white_wine_table}")
 white_wine.write.saveAsTable(f"{PROD_CATALOG_NAME}.{PROD_SCHEMA_NAME}.white_wine")
 red_wine.write.saveAsTable(f"{PROD_CATALOG_NAME}.{PROD_SCHEMA_NAME}.red_wine")
+
+# COMMAND ----------
+
+from pyspark.sql.functions import *
+
+input_table_test = white_wine.withColumn("is_red", lit(0.0)).drop("quality")
+input_table_test.write.mode("overwrite").saveAsTable(f"{PROD_CATALOG_NAME}.{PROD_SCHEMA_NAME}.input_table_test")
+
+# COMMAND ----------
+
+
