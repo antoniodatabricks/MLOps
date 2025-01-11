@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            padding: 5px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .spinner {
+            display: none; /* Hidden by default */
+            border: 5px solid #f3f3f3; /* Light grey */
+            border-top: 5px solid #007BFF; /* Blue */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        function showSpinner() {
+            document.getElementById("spinner").style.display = "block"; // Show the spinner
+            document.getElementById("submit-button").disabled = true; // Disable the button
+        }
+    </script>
+</head>
+<body>
+    <h1>Score Dataset - Model Serving</h1>
+    <form method="POST" onsubmit="showSpinner()">
+        <label for="input_table">Input Table:</label>
+        <input type="text" id="input_table" name="input_table" required>
+        <label for="department">Department:</label>
+        <input type="text" id="department" name="department" required>
+        
+        <button type="submit" id="submit-button">Submit</button>
+    </form>
+
+    <!-- Spinner Element -->
+    <div id="spinner" class="spinner"></div>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="message {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+</body>
+<body>
+    {% if label %}
+    <div class="label">
+        Your output table: <b>{{ label }}</b><br><br>Sample first 20 records:
+    </div>
+    <br>
+    {{ table | safe }}
+    {% endif %}
+</body>
+</html>
